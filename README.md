@@ -1,2 +1,2 @@
 # AECS2
-A port of the functionality of absolute-ecs (AECS) to C#.
+An implementation of the Entity-Component-System (ECS) framework in C#.
