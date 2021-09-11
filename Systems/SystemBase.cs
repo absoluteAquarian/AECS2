@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace AECS2.Systems{
-	public abstract class SystemBase{
+	public abstract class SystemBase : IDisposable{
 		private Queue<SystemMessage> messages;
+		private bool disposed;
 
 		public SystemBase(){
 			messages = new Queue<SystemMessage>();
@@ -14,10 +16,25 @@ namespace AECS2.Systems{
 
 		public abstract void PostUpdate(int worldIndex);
 
-		public void AddMessage(SystemMessage message)
-			=> messages.Enqueue(message);
+		public void AddMessage(int sendingSystem, object data)
+			=> messages.Enqueue(new SystemMessage(sendingSystem, data));
 
-		public void AddMessage(object data)
-			=> messages.Enqueue(new SystemMessage(data));
+		protected virtual void Dispose(bool disposing){
+			if(!disposed){
+				disposed = true;
+
+				if(disposing)
+					messages.Clear();
+
+				messages = null;
+			}
+		}
+
+		~SystemBase() => Dispose(false);
+
+		public void Dispose(){
+			Dispose(true);
+			GC.SuppressFinalize(this);
+		}
 	}
 }

@@ -1,8 +1,10 @@
 ﻿namespace AECS2.Systems{
 	public struct SystemMessage{
-		public object data;
+		public readonly object data;
+		public readonly int sourceSystem;
 
-		public SystemMessage(object data){
+		public SystemMessage(int srcSystem, object data){
+			sourceSystem = srcSystem;
 			this.data = data;
 		}
 	}
